@@ -13,6 +13,10 @@ def imprimir_datos(phi_bi,x_no , x_po, e_max, Va):
     return 
 
 def punto3(Na,Nd,ni,T,e_s,Va ):
+
+    print("\nPunto 3 :\n Repetir el ı́tem anterior al aplicar la tensión Va especificada en la Tabla 1.\n")
+
+
     phi_bi = obtener_tension_contacto(Na,Nd,ni,T)
     x_no = x_(phi_bi - Va, Na , Nd,e_s )
     x_po = x_(phi_bi - Va , Nd , Na ,e_s )

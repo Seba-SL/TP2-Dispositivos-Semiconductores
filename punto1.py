@@ -176,6 +176,8 @@ def condicion_diodo_corto(parametros,Wn, Wp ):
 
 def punto1(Na,Nd,T , tao_n ,tao_po ,Va, Wn, Wp):
 
+    print("\nPunto 1: \n Hallar las movilidades y coeficientes de difusión para electrones y huecos de ambos lados de la juntura usando los datos de dopaje de la Tabla 1. Además, estimar la longitud caracterı́stica de difusión de los portadores minoritarios y determinar si es válida la hipótesis de diodo corto.\n\n")
+
     datos_enunciado(Na, Nd, T,tao_n , tao_po , Va)
 
     movilidades_coeficientesD = movilidades_y_difusion(Na, Nd, T)

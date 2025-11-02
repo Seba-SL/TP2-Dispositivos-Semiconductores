@@ -42,6 +42,9 @@ def obtener_e_max(phi_bi,Na,Nd,e_s):
 
 def punto2(Na,Nd,ni,T,e_s ):
     
+    print("\nPunto 2: \nCalcular los siguientes parámetros para la juntura en equilibrio termodinámico (ETD): ψbi ; xn ; xp y Emáx .\n")
+
+
     phi_bi = obtener_tension_contacto(Na,Nd,ni,T)
     x_no = x_(phi_bi, Na , Nd,e_s )
     x_po = x_(phi_bi, Nd , Na ,e_s )
