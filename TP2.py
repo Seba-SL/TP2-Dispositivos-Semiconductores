@@ -6,6 +6,7 @@ from punto2 import punto2
 from punto3 import punto3
 from punto4 import punto4
 from punto5 import punto5
+from punto6 import punto6
 
 # Parámetros del diodo
 Na = 2e15  # cm^-3
@@ -29,3 +30,5 @@ e_s = 11.9*e_o
 # punto4(Na,Nd,ni,T,Va)
 
 punto5(Na,Nd,ni,T ,Wp,Wn,Va)
+
+punto6(Na,Nd,ni,T ,Wp,Wn,Va)

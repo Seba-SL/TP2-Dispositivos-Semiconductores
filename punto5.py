@@ -69,6 +69,8 @@ def obtener_porcentajes_Jn_Jp(ni,Na,Nd,Wp,Wn,coeficientes,Va,T):
 
 def punto5(Na,Nd,ni,T ,Wp,Wn,Va):
 
+    print("\n\nPunto 5: \nCalcular la densidad de corriente que circula por el diodo cuando se aplica Va . ¿Qué porcentaje de la corriente corresponde a electrones y huecos?")
+
     Vth = (k*T)/q
 
     coeficientes = movilidades_y_difusion(Na, Nd, T)
