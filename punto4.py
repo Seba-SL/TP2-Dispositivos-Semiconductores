@@ -99,21 +99,28 @@ def potencial_electrico(ni,Na,Nd,phi_bi,T, Va, x_lim_max ):
     xpa = x_(phi_bi - Va, Nd, Na, e_s)
 
     x = np.linspace(-x_lim_max, x_lim_max, 5000)
-    phi = np.zeros_like(x)
+    phi_o = np.zeros_like(x)
     
     phi_n = Vth*np.log(Nd/ni)
     phi_p = -Vth*np.log(Na/ni)
 
      # Lado p negativo
     mask1 = x < -xp0
-    phi[mask1] = phi_p
-
+    phi_o[mask1] = phi_p
 
     mask4 = x > xn0
-    phi[mask4] = phi_n
+    phi_o[mask4] = phi_n
+
+    mask2 = (x >= -xp0) & (x < 0)
+    phi_o[mask2] = phi_p + q * Na / (2 * e_s) * (x[mask2] + xp0)**2
+    
+    mask3 = (x >= 0) & (x <= xn0)
+    phi_o[mask3] = phi_n - q * Nd / (2 * e_s) * (x[mask3] - xn0)**2
+    
+
 
     plt.figure(figsize=(10, 6))
-    plt.plot(x*1e4, phi*1e3, linewidth = 5 ,alpha = 0.8 )  # eje x en µm
+    plt.plot(x*1e4, phi_o*1e3, linewidth = 5 ,alpha = 0.8 )  # eje x en µm
     plt.xlabel("x [µm]")
     plt.ylabel("Potencial φ_o(x) [mV]")
 
