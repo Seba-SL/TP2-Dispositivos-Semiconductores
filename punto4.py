@@ -84,10 +84,50 @@ def densidad_de_carga(Na, Nd, phi_bi, Va):
 
     plt.tight_layout()
     plt.show()
+    return 
 
 
-def campo_electrico():
-    return
+def campo_electrico(phi_bi,Va, Na, Nd):
+
+    xn0 =  x_(phi_bi,Na,Nd,e_s )
+    xp0 =  x_(phi_bi, Nd,Na,e_s )
+
+    xna =  x_(phi_bi - Va,Na,Nd,e_s )
+    xpa = x_(phi_bi - Va, Nd,Na,e_s )
+
+
+    # Rango de x: un poco más amplio para mostrar toda la región
+    x = np.linspace(-1.2 * xp0, 1.2 * xn0, 500)
+    E_o = np.zeros_like(x)
+
+    # Tramos definidos por la ecuación
+    # Región p: -xp0 < x <= 0
+    mask_p = (x > -xp0) & (x <= 0)
+    E_o[mask_p] = -q * Na / e_s * (x[mask_p] + xp0)
+
+    # Región n: 0 < x <= xn0
+    mask_n = (x > 0) & (x <= xn0)
+    E_o[mask_n] = q * Nd / e_s * (x[mask_n] - xn0)
+
+
+    E_a = E_o*(np.sqrt((1 - (Va/phi_bi))))
+
+    # Gráfico
+    plt.figure(figsize=(8, 5))
+    plt.plot(x * 1e4, E_o, color='blue', linewidth=5,  alpha = 0.7,label=r'$\mathcal{E}_o(x)$ : ETD')
+    plt.plot(x * 1e4, E_a, color='red', linewidth=5, alpha = 0.7,label=r'$\mathcal{E}_a(x)$: Va')
+    
+    plt.axhline(0, color='k', linewidth=0.8)
+    plt.axvline(0, color='k', linestyle='--', linewidth=0.9, label='Unión metalúrgica')
+
+    plt.title('Campo eléctrico en una unión p–n')
+    plt.xlabel('Posición $x$ [$\mu$m]')
+    plt.ylabel('Campo eléctrico $\mathcal{E}(x)$ [V/cm]')
+    plt.grid(True, linestyle='--', alpha=0.6)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+    return 
 
 def punto4(Na,Nd,ni,T,Va):
     print("\nPunto 4 : \nConfeccionar los gráficos de la densidad de carga, el campo eléctrico y la función potencial eléctrica en función de la distancia (en total son tres gráficos). Cada uno debe tener dos curvas (ETD y tensión aplicada) y estar destacado como varı́a la zona de vaciamiento. \n")
@@ -96,6 +136,6 @@ def punto4(Na,Nd,ni,T,Va):
 
     densidad_de_carga(Na,Nd,phi_bi, Va)
 
-
+    campo_electrico(Na,Nd,phi_bi, Va)
     
     return
