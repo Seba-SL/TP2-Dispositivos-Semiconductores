@@ -27,11 +27,11 @@ def densidad_de_carga(Na, Nd, phi_bi, Va):
     fig, ax = plt.subplots(figsize=(10, 6))
     x_etd = np.array([-x_lim_max, -x_p0, -x_p0, 0, 0, x_n0, x_n0, x_lim_max])
     rho_etd = np.array([0, 0, rho_Na, rho_Na, rho_Nd, rho_Nd, 0, 0])
-    ax.step(x_etd * 1e4, rho_etd, 'orange', alpha=0.7, linewidth=5, label='Equilibrio (ETD)')
+    ax.step(x_etd * 1e4, rho_etd, 'blue', alpha=0.7, linewidth=5, label='Equilibrio (ETD)')
 
     x_polarizado = np.array([-x_lim_max, -x_pa, -x_pa, 0, 0, x_na, x_na, x_lim_max])
     rho_polarizado = np.array([0, 0, rho_Na, rho_Na, rho_Nd, rho_Nd, 0, 0])
-    ax.step(x_polarizado * 1e4, rho_polarizado, 'green', alpha=0.7, linewidth=5, label=f'$V_a = {Va*1000:.0f} \\,mV$')
+    ax.step(x_polarizado * 1e4, rho_polarizado, 'red', alpha=0.7, linewidth=5, label=f'$V_a = {Va*1000:.0f} \\,mV$')
 
     ax.axhline(0, color='k', linewidth=0.8)
     ax.axvline(0, color='k', linestyle='--', linewidth=0.9, label='Unión metalúrgica')
@@ -117,12 +117,15 @@ def potencial_electrico(ni,Na,Nd,phi_bi,T, Va, x_lim_max ):
     mask3 = (x >= 0) & (x <= xn0)
     phi_o[mask3] = phi_n - q * Nd / (2 * e_s) * (x[mask3] - xn0)**2
     
-
+    polarizacion_label = f"Potencial con polarización $V_a = {Va*1000:.0f}$ mV | ($\phi_0 + V_a$)"
 
     plt.figure(figsize=(10, 6))
-    plt.plot(x*1e4, phi_o*1e3, linewidth = 5 ,alpha = 0.8 )  # eje x en µm
+    plt.plot(x*1e4, phi_o*1e3, linewidth = 5 ,alpha = 0.8 ,label= "Potencial de Equilibrio ($\phi_0$)")  # eje x en µm
+    plt.plot(x*1e4, (phi_o + Va)*1e3,color = "red", linewidth = 5 ,alpha = 0.8, label=polarizacion_label)  # eje x en µm
     plt.xlabel("x [µm]")
-    plt.ylabel("Potencial φ_o(x) [mV]")
+    plt.ylabel("Potencial φ(x) [mV]")
+
+    plt.legend(loc='upper left', frameon=True, fancybox=True, shadow=True, borderpad=1) # 'frameon=True' para el recuadro, 'shadow' para una sombra, 'borderpad' para el espacio interno
 
     plt.title('Potencial eléctrico [mV] en función de la distancia [µm]')
     plt.grid(True)
