@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.integrate import cumtrapz
 
 from punto2 import obtener_e_max,x_,obtener_tension_contacto
 
@@ -87,10 +88,44 @@ def campo_electrico(Na, Nd, phi_bi, Va, x_lim_max):
     return 
 
 
-def potencial_electrico(x_lim_max):
-    return
+
+def potencial_electrico(ni,Na,Nd,phi_bi,T, Va, x_lim_max ):
+
+    Vth = (k*T)/q 
+
+    xn0 = x_(phi_bi, Na, Nd, e_s)
+    xp0 = x_(phi_bi, Nd, Na, e_s)
+    xna = x_(phi_bi - Va, Na, Nd, e_s)
+    xpa = x_(phi_bi - Va, Nd, Na, e_s)
+
+    x = np.linspace(-x_lim_max, x_lim_max, 5000)
+    phi = np.zeros_like(x)
+    
+    phi_n = Vth*np.log(Nd/ni)
+    phi_p = -Vth*np.log(Na/ni)
+
+     # Lado p negativo
+    mask1 = x < -xp0
+    phi[mask1] = phi_p
+
+
+    mask4 = x > xn0
+    phi[mask4] = phi_n
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(x*1e4, phi*1e3, linewidth = 5 ,alpha = 0.8 )  # eje x en µm
+    plt.xlabel("x [µm]")
+    plt.ylabel("Potencial φ_o(x) [mV]")
+
+    plt.title('Potencial eléctrico [mV] en función de la distancia [µm]')
+    plt.grid(True)
+    plt.show()
+
+    return 
+
 
 def punto4(Na,Nd,ni,T,Va):
+    
     print("\nPunto 4 : \nConfeccionar los gráficos de la densidad de carga, el campo eléctrico y la función potencial eléctrica en función de la distancia (en total son tres gráficos). Cada uno debe tener dos curvas (ETD y tensión aplicada) y estar destacado como varı́a la zona de vaciamiento. \n")
     
     phi_bi = obtener_tension_contacto(Na,Nd,ni,T)
@@ -100,6 +135,6 @@ def punto4(Na,Nd,ni,T,Va):
     campo_electrico(Na,Nd,phi_bi, Va, x_lim_max )
 
 
-    potencial_electrico(x_lim_max)
+    potencial_electrico(ni,Na,Nd,phi_bi,T, Va, x_lim_max )
     
     return
