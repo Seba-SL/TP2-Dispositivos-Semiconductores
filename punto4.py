@@ -45,7 +45,7 @@ def densidad_de_carga(Na, Nd, phi_bi, Va):
     # Rango del Eje X: 1.2 veces el ancho máximo
     x_lim_max =  max(x_n0 + x_p0, x_na + x_pa) / 2
     
-    fig, ax = plt.subplots(figsize=(8, 8))
+    fig, ax = plt.subplots(figsize=(20, 20))
 
     # --- Caso 1: Equilibrio (ETD, Línea Discontinua) ---
     x_etd = np.array([-x_lim_max, -x_p0, -x_p0, 0, 0, x_n0, x_n0, x_lim_max])
@@ -55,7 +55,7 @@ def densidad_de_carga(Na, Nd, phi_bi, Va):
     # --- Caso 2: Tensión Aplicada (Va, Línea Sólida) ---
     x_polarizado = np.array([-x_lim_max, -x_pa, -x_pa, 0, 0, x_na, x_na, x_lim_max])
     rho_polarizado = np.array([0, 0, rho_Na, rho_Na, rho_Nd, rho_Nd, 0, 0])
-    ax.step(x_polarizado * 1e4, rho_polarizado, 'green',alpha = 0.7, where='post', linewidth=5, label=f'$V_a = {Va*1000:.0f}  \,mV$')
+    ax.step(x_polarizado * 1e4, rho_polarizado, 'green',alpha = 0.7, where='post', linewidth=5, label=f'$V_a = {Va*1000:.0f}  \,mV $')
 
     # 3. FORMATO Y ANOTACIONES
     ax.axhline(0, color='k', linewidth=0.5)
@@ -87,47 +87,54 @@ def densidad_de_carga(Na, Nd, phi_bi, Va):
     return 
 
 
-def campo_electrico(phi_bi,Va, Na, Nd):
+def campo_electrico(Na,Nd,phi_bi, Va):
 
-    xn0 =  x_(phi_bi,Na,Nd,e_s )
-    xp0 =  x_(phi_bi, Nd,Na,e_s )
+   # Longitudes de equilibrio y bajo polarización
+    xn0 = x_(phi_bi, Na, Nd, e_s)
+    xp0 = x_(phi_bi, Nd, Na, e_s)
+    xna = x_(phi_bi - Va, Na, Nd, e_s)
+    xpa = x_(phi_bi - Va, Nd, Na, e_s)
 
-    xna =  x_(phi_bi - Va,Na,Nd,e_s )
-    xpa = x_(phi_bi - Va, Nd,Na,e_s )
-
-
-    # Rango de x: un poco más amplio para mostrar toda la región
-    x = np.linspace(-1.2 * xp0, 1.2 * xn0, 500)
+    # Rango de x
+    x = np.linspace(-1.2 * xp0, 1.2 * xn0, 5000)
     E_o = np.zeros_like(x)
 
-    # Tramos definidos por la ecuación
-    # Región p: -xp0 < x <= 0
+    # Campo en equilibrio
     mask_p = (x > -xp0) & (x <= 0)
     E_o[mask_p] = -q * Na / e_s * (x[mask_p] + xp0)
-
-    # Región n: 0 < x <= xn0
     mask_n = (x > 0) & (x <= xn0)
     E_o[mask_n] = q * Nd / e_s * (x[mask_n] - xn0)
 
+    # Campo con tensión aplicada
+    E_a = E_o * np.sqrt(1 - Va / phi_bi)
 
-    E_a = E_o*(np.sqrt((1 - (Va/phi_bi))))
+    # --- Impresiones para verificar ---
+    print(f"x_n0 = {xn0*1e4:.2f} µm,  x_p0 = {xp0*1e4:.2f} µm")
+    print(f"x_na = {xna*1e4:.2f} µm,  x_pa = {xpa*1e4:.2f} µm")
+    print(f"Eo(0) = {abs(E_o[np.argmin(abs(x))])/1e3:.2f} kV/cm")
+    print(f"Ea(0) = {abs(E_a[np.argmin(abs(x))])/1e3:.2f} kV/cm")
 
-    # Gráfico
-    plt.figure(figsize=(8, 5))
-    plt.plot(x * 1e4, E_o, color='blue', linewidth=5,  alpha = 0.7,label=r'$\mathcal{E}_o(x)$ : ETD')
-    plt.plot(x * 1e4, E_a, color='red', linewidth=5, alpha = 0.7,label=r'$\mathcal{E}_a(x)$: Va')
+    # --- Gráfico ---
+    plt.figure(figsize=(20,20))
+    plt.plot(x * 1e4, E_o / 1e3, color='blue', linewidth=5, alpha=0.8, label=r'$\mathcal{E}_0(x)$ (ETD)')
+    plt.plot(x * 1e4, E_a / 1e3, color='red', linewidth=5, alpha=0.8, label=f'$E_a(x), V_a = {Va}  \,mV $')
+
+    # # Etiquetas de posiciones
+    # marcas_x = np.array([-xp0, -xpa, 0, xn0, xna]) * 1e4
+    # etiquetas_x = [r'$-x_{p0}$', r'$-x_{pa}$', '0', r'$x_{n0}$', r'$x_{na}$']
+    # plt.xticks(marcas_x, etiquetas_x, fontsize=12)
     
     plt.axhline(0, color='k', linewidth=0.8)
     plt.axvline(0, color='k', linestyle='--', linewidth=0.9, label='Unión metalúrgica')
 
     plt.title('Campo eléctrico en una unión p–n')
     plt.xlabel('Posición $x$ [$\mu$m]')
-    plt.ylabel('Campo eléctrico $\mathcal{E}(x)$ [V/cm]')
+    plt.ylabel('Campo eléctrico $\mathcal{E}(x)$ [kV/cm]')
     plt.grid(True, linestyle='--', alpha=0.6)
     plt.legend()
     plt.tight_layout()
     plt.show()
-    return 
+    return
 
 def punto4(Na,Nd,ni,T,Va):
     print("\nPunto 4 : \nConfeccionar los gráficos de la densidad de carga, el campo eléctrico y la función potencial eléctrica en función de la distancia (en total son tres gráficos). Cada uno debe tener dos curvas (ETD y tensión aplicada) y estar destacado como varı́a la zona de vaciamiento. \n")

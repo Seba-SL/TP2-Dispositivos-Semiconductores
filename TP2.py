@@ -21,7 +21,7 @@ e_s = 11.9*e_o
 
 punto1(Na,Nd,T , tao_n ,tao_po ,Va, Wn, Wp)
 
-punto2(Na,Nd,ni,T,e_s )
+punto2(Na,Nd,ni,T ,e_s)
 
 punto3(Na,Nd,ni,T,e_s,Va )
 
