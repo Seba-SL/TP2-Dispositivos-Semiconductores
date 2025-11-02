@@ -50,12 +50,12 @@ def densidad_de_carga(Na, Nd, phi_bi, Va):
     # --- Caso 1: Equilibrio (ETD, Línea Discontinua) ---
     x_etd = np.array([-x_lim_max, -x_p0, -x_p0, 0, 0, x_n0, x_n0, x_lim_max])
     rho_etd = np.array([0, 0, rho_Na, rho_Na, rho_Nd, rho_Nd, 0, 0])
-    ax.step(x_etd * 1e4, rho_etd, 'orange',alpha = 0.7, where='post', linewidth=3.5, label='Equilibrio (ETD)')
+    ax.step(x_etd * 1e4, rho_etd, 'orange',alpha = 0.7, where='post', linewidth=5, label='Equilibrio (ETD)')
 
     # --- Caso 2: Tensión Aplicada (Va, Línea Sólida) ---
     x_polarizado = np.array([-x_lim_max, -x_pa, -x_pa, 0, 0, x_na, x_na, x_lim_max])
     rho_polarizado = np.array([0, 0, rho_Na, rho_Na, rho_Nd, rho_Nd, 0, 0])
-    ax.step(x_polarizado * 1e4, rho_polarizado, 'green',alpha = 0.7, where='post', linewidth=3.5, label=f'$V_a = {Va*1000:.0f}  \,mV$')
+    ax.step(x_polarizado * 1e4, rho_polarizado, 'green',alpha = 0.7, where='post', linewidth=5, label=f'$V_a = {Va*1000:.0f}  \,mV$')
 
     # 3. FORMATO Y ANOTACIONES
     ax.axhline(0, color='k', linewidth=0.5)
@@ -86,11 +86,16 @@ def densidad_de_carga(Na, Nd, phi_bi, Va):
     plt.show()
 
 
+def campo_electrico():
+    return
+
 def punto4(Na,Nd,ni,T,Va):
     print("\nPunto 4 : \nConfeccionar los gráficos de la densidad de carga, el campo eléctrico y la función potencial eléctrica en función de la distancia (en total son tres gráficos). Cada uno debe tener dos curvas (ETD y tensión aplicada) y estar destacado como varı́a la zona de vaciamiento. \n")
     
     phi_bi = obtener_tension_contacto(Na,Nd,ni,T)
 
     densidad_de_carga(Na,Nd,phi_bi, Va)
+
+
     
     return
