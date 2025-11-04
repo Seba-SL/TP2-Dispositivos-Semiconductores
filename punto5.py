@@ -64,7 +64,7 @@ def obtener_porcentajes_Jn_Jp(ni,Na,Nd,Wp,Wn,coeficientes,Va,T):
 
     print(f"Jn = {J_n_porcentaje:.2f} %  | Jp = {J_p_porcentaje:.2f} %")
 
-    return 
+    return J_n,J_p
 
 
 def punto5(Na,Nd,ni,T ,Wp,Wn,Va):
@@ -83,6 +83,9 @@ def punto5(Na,Nd,ni,T ,Wp,Wn,Va):
 
     print(f"J (Va = {Va*1e3:.2f} mV)=  {J*1e6:.2f} \mu A/cm^2"  )
 
-    obtener_porcentajes_Jn_Jp(ni,Na,Nd,Wp,Wn,coeficientes,Va,T)
+    J_nP,J_pN =  obtener_porcentajes_Jn_Jp(ni,Na,Nd,Wp,Wn,coeficientes,Va,T)
+
+    
+    print(f"Corrientes de Difusión Minoritarios: J_nP = {J_nP*1e6:.3f}  u A/cm^2  J_pN = {J_pN*1e6:.3f} u A/cm^2 ")
 
     return J
