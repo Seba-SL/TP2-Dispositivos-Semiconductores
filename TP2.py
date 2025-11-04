@@ -21,7 +21,7 @@ ni = 1e10 #cm-3
 e_o = 88.5e-15 # C/(V cm)
 e_s = 11.9*e_o
 
-# punto1(Na,Nd,T , tao_n ,tao_po ,Va, Wn, Wp)
+punto1(ni,Na,Nd,T , tao_n ,tao_po ,Va, Wn, Wp)
 
 # punto2(Na,Nd,ni,T ,e_s)
 
@@ -29,6 +29,6 @@ e_s = 11.9*e_o
 
 # punto4(Na,Nd,ni,T,Va)
 
-punto5(Na,Nd,ni,T ,Wp,Wn,Va)
+#punto5(Na,Nd,ni,T ,Wp,Wn,Va)
 
-punto6(Na,Nd,ni,T ,Wp,Wn,Va)
+#punto6(Na,Nd,ni,T ,Wp,Wn,Va)

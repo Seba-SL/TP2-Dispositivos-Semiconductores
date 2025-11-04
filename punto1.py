@@ -9,7 +9,49 @@ e_o = 88.5e-15 # C/(V cm)
 e_s = 11.9*e_o
 
 
-def datos_enunciado(Na, Nd, T, tao_n , tao_po , Va):
+def  imprimir_concentraciones(ni,Na,Nd,T,Va):
+
+    # Convertir μm -> cm
+    W = 22 * 1e-4
+
+    # Dividir la región en P y N
+    x = np.linspace(-W/2, W/2, 1000)
+
+    # Regiones
+    x_p = x[x < 0]
+    x_n = x[x >= 0]
+
+    # Concentraciones
+    p_p = Na
+    n_p = (ni**2) / Na
+    n_n = Nd
+    p_n = (ni**2) / Nd
+
+    # Crear arrays del mismo tamaño
+    p = np.where(x < 0, p_p, p_n)
+    n = np.where(x < 0, n_p, n_n)
+
+    # Graficar
+    plt.figure(figsize=(8,5))
+    plt.semilogy(x*1e4, p, label="Huecos p(x)", color='red',linewidth = 5,alpha = 0.8)
+    plt.semilogy(x*1e4, n, label="Electrones n(x)", color='blue',linewidth = 5,alpha = 0.8)
+    plt.axvline(0, color='k', linestyle='--', label="Unión")
+    plt.xlabel("Posición x [μm]")
+    plt.ylabel("Concentración [1/cm³]")
+    plt.title(f"Distribución de portadores en un diodo de {22} μm")
+
+
+    # Indicar regiones P y N
+    plt.text(-22/4, max(Na, Nd)*0.7, "Lado P (x < 0)", color='black', fontsize=11, fontweight='bold')
+    plt.text(22/4, max(Na, Nd)*0.7, "Lado N (x > 0)",  color='black', fontsize=11, fontweight='bold')
+
+    plt.legend()
+    plt.grid(True, which="both")
+    plt.show()
+
+    return
+
+def datos_enunciado(ni,Na, Nd, T, tao_n , tao_po , Va):
     Vth = (k*T)/q
     print(f"Temperatura: {T:.4g} K")
     print(f"Dopajes: Na = {Na:.2g} cm^-3, Nd = {Nd:.2g} cm^-3")
@@ -18,6 +60,8 @@ def datos_enunciado(Na, Nd, T, tao_n , tao_po , Va):
     print(f"Tensión Termica : tao_n = {tao_n:.3g} s")
     print(f"Tensión Termica : tao_po = {tao_po:.3g} s")
     print(f"Tensión de polarización :  { Va:.9g}" )
+
+    imprimir_concentraciones(ni,Na,Nd,T,Va)
 
 
 def movilidades_y_difusion(Na, Nd, T):
@@ -174,11 +218,11 @@ def condicion_diodo_corto(parametros,Wn, Wp ):
 
 
 
-def punto1(Na,Nd,T , tao_n ,tao_po ,Va, Wn, Wp):
+def punto1(ni,Na,Nd,T , tao_n ,tao_po ,Va, Wn, Wp):
 
     print("\nPunto 1: \n Hallar las movilidades y coeficientes de difusión para electrones y huecos de ambos lados de la juntura usando los datos de dopaje de la Tabla 1. Además, estimar la longitud caracterı́stica de difusión de los portadores minoritarios y determinar si es válida la hipótesis de diodo corto.\n\n")
 
-    datos_enunciado(Na, Nd, T,tao_n , tao_po , Va)
+    datos_enunciado(ni,Na, Nd, T,tao_n , tao_po , Va)
 
     movilidades_coeficientesD = movilidades_y_difusion(Na, Nd, T)
 
