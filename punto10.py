@@ -32,12 +32,14 @@ def punto10(ni,Na,Nd,Wp,Wn,Va,T,imprimir_enunciado):
 
     p = (ni*ni)/Nd
 
-    J_nP_arr  = q*p*mu_nP*E_P
+    #print(f"\n mu_nP = {mu_nP}   mu_pN = {mu_pN } , n = {n} , p = {p}\n")
 
-    J_pN_arr = q*n*mu_pN*E_N
+    J_nP_arr  = q*n*mu_nP*E_P
+
+    J_pN_arr = q*p*mu_pN*E_N
 
     
-    print(f"Corrientes de Arrastre Minoritarios: J_nP_arr = {J_nP_arr*1e6:.3f}  u A/cm^2  J_pN_arr = {J_pN_arr*1e6:.3f} u A/cm^2 ")
+    print(f"Corrientes de Arrastre Minoritarios: J_nP_arr = {J_nP_arr} A/cm^2  J_pN_arr = {J_pN_arr}  A/cm^2 ")
 
 
     return J_nP_arr, J_pN_arr
