@@ -41,7 +41,7 @@ def densidad_de_carga(Na, Nd, phi_bi, Va):
     plt.xticks(marcas_x, etiquetas_x, fontsize=12)
 
     ax.set_xlim(-x_um, x_um)  # mismo límite que campo eléctrico
-    ax.set_xlabel('Posición $x$ [μm]')
+    ax.set_xlabel('Posición $x$ [nm]')
     ax.set_ylabel('Densidad de Carga [C/cm³]')
     ax.set_title('Densidad de Carga en una Unión p–n')
     ax.grid(True, linestyle='--', alpha=0.6)
@@ -76,7 +76,7 @@ def campo_electrico(Na, Nd, phi_bi, Va, x_lim_max):
     plt.axvline(0, color='k', linestyle='--', linewidth=0.9, label='Unión metalúrgica')
 
     plt.xlim(-x_lim_max * 1e4, x_lim_max * 1e4)
-    plt.xlabel('Posición $x$ [μm]')
+    plt.xlabel('Posición $x$ [nm]')
     plt.ylabel('Campo eléctrico $\mathcal{E}(x)$ [kV/cm]')
     plt.title('Campo eléctrico en una unión p–n')
     plt.grid(True, linestyle='--', alpha=1)
@@ -119,15 +119,19 @@ def potencial_electrico(ni,Na,Nd,phi_bi,T, Va, x_lim_max ):
     
     polarizacion_label = f"Potencial con polarización $V_a = {Va*1000:.0f}$ mV | ($\phi_0 + V_a$)"
 
+    phi_con_va =  (phi_o + Va)
+
+
+
     plt.figure(figsize=(10, 6))
     plt.plot(x*1e4, phi_o*1e3, linewidth = 5 ,alpha = 0.8 ,label= "Potencial de Equilibrio ($\phi_0$)")  # eje x en µm
-    plt.plot(x*1e4, (phi_o + Va)*1e3,color = "red", linewidth = 5 ,alpha = 0.8, label=polarizacion_label)  # eje x en µm
-    plt.xlabel("x [µm]")
+    plt.plot(x*1e4,phi_con_va*1e3,color = "red", linewidth = 5 ,alpha = 0.8, label=polarizacion_label)  # eje x en µm
+    plt.xlabel("x [nm]")
     plt.ylabel("Potencial φ(x) [mV]")
 
     plt.legend(loc='upper left', frameon=True, fancybox=True, shadow=True, borderpad=1) # 'frameon=True' para el recuadro, 'shadow' para una sombra, 'borderpad' para el espacio interno
 
-    plt.title('Potencial eléctrico [mV] en función de la distancia [µm]')
+    plt.title('Potencial eléctrico [mV] en función de la distancia [nm]')
     plt.grid(True)
     plt.show()
 

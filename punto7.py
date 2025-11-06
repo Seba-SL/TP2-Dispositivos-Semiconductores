@@ -13,9 +13,10 @@ e_o = 88.5e-15 # C/(V cm)
 e_s = 11.9*e_o
 
 
-def punto7(ni,Na,Nd,Wp,Wn,Va,T):
+def punto7(ni,Na,Nd,Wp,Wn,Va,T,imprimir_enunciado):
 
-    print("\nPunto 7: \nCalcular la corriente de difusión de mayoritarios de cada lado de la juntura, suponiendo válida la hipótesis de cuasi-neutralidad en las regiones cuasi-neutrales (QNRs), ¿En qué sentido se difunden los portadores mayoritarios? ¿Es consistente con la corriente calculada en el ı́tem 5?\n\n")
+    if(imprimir_enunciado):
+        print("\nPunto 7: \nCalcular la corriente de difusión de mayoritarios de cada lado de la juntura, suponiendo válida la hipótesis de cuasi-neutralidad en las regiones cuasi-neutrales (QNRs), ¿En qué sentido se difunden los portadores mayoritarios? ¿Es consistente con la corriente calculada en el ı́tem 5?\n\n")
    
     coeficientes = movilidades_y_difusion(Na,Nd,T)
 
@@ -34,5 +35,5 @@ def punto7(ni,Na,Nd,Wp,Wn,Va,T):
 
     print(f"Corrientes de Difusión Mayoritarios: J_nN = {J_nN*1e6:.3f}  u A/cm^2  J_pP = {J_pP*1e6:.3f} u A/cm^2 ")
    
-    return 
+    return J_nN , J_pP
 
