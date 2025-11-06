@@ -40,10 +40,10 @@ e_s = 11.9*e_o
 
 # punto7(ni,Na,Nd,Wp,Wn,Va,T,True)
    
-punto8(ni,Na,Nd,Wp,Wn,Va,T,True)
+# punto8(ni,Na,Nd,Wp,Wn,Va,T,True)
 
-punto9(ni,Na,Nd,Wp,Wn,Va,T,True)
+# punto9(ni,Na,Nd,Wp,Wn,Va,T,True)
 
 punto10(ni,Na,Nd,Wp,Wn,Va,T,True)
 
-punto11()
+punto11(ni,Na,Nd,Wp,Wn,Va,T)
