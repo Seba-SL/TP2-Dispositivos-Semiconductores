@@ -42,8 +42,8 @@ e_s = 11.9*e_o
    
 punto8(ni,Na,Nd,Wp,Wn,Va,T,True)
 
-punto9(ni,Na,Nd,Wp,Wn,Va,T)
+punto9(ni,Na,Nd,Wp,Wn,Va,T,True)
 
-punto10()  
+punto10(ni,Na,Nd,Wp,Wn,Va,T,True)
 
 punto11()
