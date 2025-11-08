@@ -119,9 +119,16 @@ def potencial_electrico(ni,Na,Nd,phi_bi,T, Va, x_lim_max ):
     
     polarizacion_label = f"Potencial con polarización $V_a = {Va*1000:.0f}$ mV | ($\phi_0 + V_a$)"
 
-    phi_con_va =  (phi_o + Va)
+    phi_con_va = np.zeros_like(x)
+    mask1_a = x < -xpa
+    mask2_a = (x >= -xpa) & (x < 0)
+    mask3_a = (x >= 0) & (x <= xna)
+    mask4_a = x > xna
 
-
+    phi_con_va[mask1_a] = phi_p + Va
+    phi_con_va[mask2_a] = (phi_p + Va) + q * Na / (2 * e_s) * (x[mask2_a] + xpa)**2
+    phi_con_va[mask3_a] =  (phi_n)  - q * Nd / (2 * e_s) * (x[mask3_a] - xna)**2
+    phi_con_va[mask4_a] = phi_n
 
     plt.figure(figsize=(10, 6))
     plt.plot(x*1e4, phi_o*1e3, linewidth = 5 ,alpha = 0.8 ,label= "Potencial de Equilibrio ($\phi_0$)")  # eje x en µm

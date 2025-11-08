@@ -16,6 +16,7 @@ e_o = 88.5e-15 # C/(V cm)
 e_s = 11.9*e_o
 
 
+
 def Graficar_corrientes_diodo(
     J_nP_arr, J_pN_arr,
     J_nN_arr, J_pP_arr,
@@ -25,80 +26,83 @@ def Graficar_corrientes_diodo(
 ):
     """
     Grafica las corrientes de arrastre y difusión en un diodo PN
-    con escala espacial realista (μm y nm).
-
-    Parámetros:
-    ------------
-    Todas las J_xx: magnitudes (positivas o negativas)
-    Wn, Wp : longitudes de las regiones cuasi neutras [m]
-    xn, xp : anchos de la zona de vaciamiento [m]
+    mostrando claramente cuáles son mayoritarios/minoritarios
+    y distinguiendo por color y tipo de corriente.
     """
 
-    # Convertir a micrómetros para mostrar en el eje x
     um = 1e-6
     Wn_um, Wp_um, xn_um, xp_um = Wn/um, Wp/um, xn/um, xp/um
 
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(13, 6))
 
     # ----- Regiones -----
-    ax.axvspan(-Wp_um, -xp_um, color='lightcoral', alpha=0.4)  # QNR-P
-    ax.axvspan(-xp_um, xn_um, color='white', alpha=0.9)        # SCR
-    ax.axvspan(xn_um, Wn_um, color='lightblue', alpha=0.4)     # QNR-N
+    ax.axvspan(-Wp_um, -xp_um, color='#ffc8c8', alpha=0.4, label='QNR–P')
+    ax.axvspan(-xp_um, xn_um+2*45*10000, color='#fdfdfd', alpha=0.9, label='SCR')
+    ax.axvspan(xn_um, Wn_um, color='#b3d9ff', alpha=0.4, label='QNR–N')
 
-    # ----- Líneas de borde -----
+    # ----- Líneas divisorias -----
     ax.axvline(-xp_um, color='k', linestyle='--', lw=1)
     ax.axvline(xn_um, color='k', linestyle='--', lw=1)
     ax.axvline(0, color='k', lw=0.8)
 
     # ----- Etiquetas de regiones -----
-    ax.text(-Wp_um/2, 2.5, "QNR–P", ha='center', fontsize=20)
-    ax.text(0, 2.5, "SCR", ha='center', fontsize=20)
-    ax.text(Wn_um/2, 2.5, "QNR–N", ha='center', fontsize=20)
+    ax.text(-Wp_um/2, 2.7, "QNR–P", ha='center', fontsize=16, fontweight='bold')
+    ax.text(0.15, 2.7, "SCR", ha='center', fontsize=16, fontweight='bold')
+    ax.text(Wn_um/2, 2.7, "QNR–N", ha='center', fontsize=16, fontweight='bold')
 
-    # ---------- Función auxiliar para flechas ----------
-    def flecha(x, y, sentido, J, color, etiqueta):
-        """Dibuja una flecha proporcional a |J| con dirección según sentido"""
-        dx = 1* np.sign(sentido)
-        lw = 4+ 6 * abs(J) / max(1e-12, max_magnitud)
-        ax.arrow(x, y, dx, 0, head_width=0.12, head_length=0.12,fc=color, ec=color, lw=lw, alpha=0.9, length_includes_head=True)
-        ax.text(x, y + 0.18, etiqueta, fontsize=6, ha='center')
+    # ---------- Flecha auxiliar ----------
+    def flecha(x, y, sentido, J, color, estilo, etiqueta):
+        dx = 2*0.8 * np.sign(sentido)
+        lw = 3 + 5 * abs(J*2) / max(1e-12, max_magnitud)
+        ax.arrow(x, y, dx, 0, head_width=0.15, head_length=0.25,fc=color, ec=color, lw=lw, alpha=0.9, linestyle=estilo, length_includes_head=True)
+        ax.text(x, y + 0.25, etiqueta, fontsize=12, ha='center', color=color, fontweight='bold')
 
-    # ---------- Calcular magnitud máxima para escalar grosor ----------
-    corrientes = [
-        J_nP_arr, J_pN_arr, J_nN_arr, J_pP_arr,
-        J_nN_dif, J_pP_dif, J_nP_dif, J_pN_dif
-    ]
+    # ---------- Magnitud máxima ----------
+    corrientes = [J_nP_arr, J_pN_arr, J_nN_arr, J_pP_arr,J_nN_dif, J_pP_dif, J_nP_dif, J_pN_dif]
     max_magnitud = max(abs(np.array(corrientes)))
 
-    # ---------- QNR–P ----------
     y_base = 1.0
-    flecha(-Wp_um*0.7, y_base,     1, J_nP_dif, 'blue', f'J_nP_dif = {J_nP_dif*1e6:.3f}  u A/cm^2')
-    flecha(-Wp_um*0.7, y_base-0.5, 1, J_nP_arr, 'navy', f'J_nP_arr = {J_nP_arr*1e6:.3f}  u A/cm^2')
-    flecha(-Wp_um*0.35, y_base,     1, J_pP_dif, 'red', f'J_pP_dif = {J_pP_dif*1e6:.3f}  u A/cm^2' )
-    flecha(-Wp_um*0.35, y_base-0.5, 1, J_pP_arr, 'darkred',  f'J_pP_arr = {J_pP_arr*1e6:.3f}  u A/cm^2')
 
-    # ---------- SCR ----------
-    #flecha(0, y_base-0.6, -1, 0.5*(J_nP_dif + J_pN_dif), 'black', r'$J_{SCR}$')
+    # ===== QNR–P =====
+    # Minoritarios: electrones (azul)
+    flecha(-Wp_um*0.7, y_base, 1,  J_nP_dif, 'blue', '-',  rf'$\mathbf{{J_{{nP,dif}}}}$ = {J_nP_dif*1e6:.2f} μA/cm²')
+    flecha(-Wp_um*0.7, y_base-0.6, 1,  J_nP_arr, 'darkblue', '-', rf'$\mathbf{{J_{{nP,arr}}}}$ = {J_nP_arr*1e6:.2f} μA/cm²')
 
-    # ---------- QNR–N ----------
-    flecha(Wn_um*0.35, y_base,    -1, J_pN_dif, 'red',  f'J_pN_dif = {J_pN_dif*1e6:.3f}  u A/cm^2')
-    flecha(Wn_um*0.35, y_base-0.5,-1, J_pN_arr, 'darkred', f'J_pN_arr = {J_pN_arr*1e6:.3f}  u A/cm^2')
-    flecha(Wn_um*0.7, y_base,     -1, J_nN_dif, 'blue', f'J_nN_dif = {J_nN_dif*1e6:.3f}  u A/cm^2')
-    flecha(Wn_um*0.7, y_base-0.5, -1, J_nN_arr, 'navy', f'J_nN_arr = {J_nN_arr*1e6:.3f}  u A/cm^2')
+    # Mayoritarios: huecos (rojo)
+    flecha(-Wp_um*0.25, y_base, -1, J_pP_dif, 'red', '-',  rf'$\mathbf{{J_{{pP,dif}}}}$ = {J_pP_dif*1e6:.2f} μA/cm²')
+    flecha(-Wp_um*0.3, y_base-0.6, 1, J_pP_arr, 'darkred', '-', rf'$\mathbf{{J_{{pP,arr}}}}$ = {J_pP_arr*1e6:.2f} μA/cm²')
 
-    # ---------- Etiquetas ----------
-    ax.text(-Wp_um*0.8, y_base+1,"Minoritarios", fontsize=12)
-    ax.text(-Wp_um*0.25, y_base+1, "Mayoritarios", fontsize=12)
-    ax.text(Wn_um*0.25, y_base+1, "Minoritarios", fontsize=12)
-    ax.text(Wn_um*0.8, y_base+1, "Mayoritarios", fontsize=12)
+    # ===== QNR–N =====
+    # Minoritarios: huecos (rojo)
+    flecha(Wn_um*0.35, y_base, 1, J_pN_dif, 'red', '-', rf'$\mathbf{{J_{{pN,dif}}}}$ = {J_pN_dif*1e6:.2f} μA/cm²')
+    flecha(Wn_um*0.35, y_base-0.6, 1, J_pN_arr, 'darkred', '-', rf'$\mathbf{{J_{{pN,arr}}}}$ = {J_pN_arr*1e6:.2f} μA/cm²')
 
-    # ---------- Ejes ----------
+    # Mayoritarios: electrones (azul)
+    flecha(Wn_um*0.8, y_base, -1, J_nN_dif, 'blue', '-', rf'$\mathbf{{J_{{nN,dif}}}}$ = {J_nN_dif*1e6:.2f} μA/cm²')
+    flecha(Wn_um*0.7, y_base-0.6, 1, J_nN_arr, 'darkblue', '-', rf'$\mathbf{{J_{{nN,arr}}}}$ = {J_nN_arr*1e6:.2f} μA/cm²')
+
+    # ===== Etiquetas globales =====
+    ax.text(-Wp_um*0.7, y_base+1.0, "n: Minoritarios", fontsize=15, color='navy', ha='center', fontweight='bold')
+    ax.text(-Wp_um*0.2, y_base+1.0, "p: Mayoritarios", fontsize=15, color='darkred', ha='center', fontweight='bold')
+    ax.text(Wn_um*0.25, y_base+1.0, "p: Minoritarios", fontsize=15, color='darkred', ha='center', fontweight='bold')
+    ax.text(Wn_um*0.75, y_base+1.0, "n: Mayoritarios", fontsize=15, color='navy', ha='center', fontweight='bold')
+
+    # ===== Leyenda =====
+    legend_elements = [
+        plt.Line2D([0], [0], color='blue', lw=3, label='Difusión (electrones)'),
+        plt.Line2D([0], [0], color='darkblue', lw=3, linestyle='-', label='Arrastre (electrones)'),
+        plt.Line2D([0], [0], color='red', lw=3, label='Difusión (huecos)'),
+        plt.Line2D([0], [0], color='darkred', lw=3, linestyle='-', label='Arrastre (huecos)'),
+    ]
+    ax.legend(handles=legend_elements, loc='upper right', fontsize=10, frameon=True)
+
+    # ===== Ejes =====
     ax.set_xlim(-Wp_um, Wn_um)
-    ax.set_ylim(0, 2.2)
-    ax.set_xlabel("x [μm]", fontsize=12)
-    ax.set_ylabel("Corrientes", fontsize=12)
-    ax.set_title("Distribución de corrientes en el diodo PN (escala real)", fontsize=13)
-    ax.grid(alpha=0.3)
+    ax.set_ylim(0, 3.2)
+    ax.set_xlabel("Posición x [μm]", fontsize=13)
+    ax.set_ylabel("Intensidad relativa de corriente", fontsize=13)
+    ax.set_title("Distribución espacial de corrientes en el diodo PN", fontsize=15, fontweight='bold')
+    ax.grid(alpha=0.25)
     plt.tight_layout()
     plt.show()
 

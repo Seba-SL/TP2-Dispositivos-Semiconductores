@@ -145,6 +145,8 @@ def longitud_caracteristica(parametros , tao_n , tao_po ):
     D_nP  = parametros['D_nP']  # ¡Asegúrate de que esta clave exista en tu dict!
     D_pP  = parametros['D_pP']
 
+    
+
     # Longitudes para electrones (n) en región N (N) o P (P)
     L_nN = np.sqrt(D_nN * tao_n) # Error común: Debería ser np.sqrt(D_n / tau_n)
 

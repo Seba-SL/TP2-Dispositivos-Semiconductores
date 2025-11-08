@@ -23,8 +23,8 @@ def obtener_Js(ni,Na,Nd,Wp,Wn,coeficientes,Va,T):
     xna = x_(phi_bi - Va, Na, Nd, e_s)
     xpa = x_(phi_bi - Va, Nd, Na, e_s)
    
-    A_p = (1/Na)*(D_nP/(Wp - xpa))
-    B_n = (1/Nd)*(D_pN/(Wn - xna))
+    A_p = (1/Na)*(D_nP/(Wp*100 - xpa))
+    B_n = (1/Nd)*(D_pN/(Wn*100 - xna))
 
 
     Js = q*(ni*ni)*(A_p + B_n)
@@ -44,9 +44,13 @@ def obtener_porcentajes_Jn_Jp(ni,Na,Nd,Wp,Wn,coeficientes,Va,T):
 
     xna = x_(phi_bi - Va, Na, Nd, e_s)
     xpa = x_(phi_bi - Va, Nd, Na, e_s)
+
+    print(f"\n xn = {xna} cm , xp = {xpa} cm \n")
+
+    print(f"\n Wn = {Wn*100} cm   Wp = {Wp*100} cm \n")
    
-    A_p = (1/Na)*(D_nP/(Wp - xpa))
-    B_n = (1/Nd)*(D_pN/(Wn - xna))
+    A_p = (1/Na)*(D_nP/(Wp*100 - xpa))
+    B_n = (1/Nd)*(D_pN/(Wn*100 - xna))
 
 
     Js = q*(ni*ni)*(A_p + B_n)
@@ -83,7 +87,7 @@ def punto5(Na,Nd,ni,T ,Wp,Wn,Va):
 
     print(f"J (Va = {Va*1e3:.2f} mV)=  {J*1e6:.2f} \mu A/cm^2"  )
 
-    J_nP,J_pN =  obtener_porcentajes_Jn_Jp(ni,Na,Nd,Wp,Wn,coeficientes,Va,T)
+    J_nP,J_pN = obtener_porcentajes_Jn_Jp(ni,Na,Nd,Wp,Wn,coeficientes,Va,T)
 
     
     print(f"Corrientes de Difusión Minoritarios: J_nP = {J_nP*1e6:.3f}  u A/cm^2  J_pN = {J_pN*1e6:.3f} u A/cm^2 ")

@@ -27,18 +27,24 @@ def punto8(ni,Na,Nd,Wp,Wn,Va,T,imprimir_enunciado):
 
 
     #Corrientes de difusion de mayoritarios
-    J_nN, J_pP = punto7(ni,Na,Nd,Wp,Wn,Va,T,False)
+    J_nN_dif, J_pP_dif = punto7(ni,Na,Nd,Wp,Wn,Va,T,False)
 
     #Corrientes J_n , J_p totales , aproximadamente la de los minoritarios de difusion
-    J_nP,J_pN = obtener_porcentajes_Jn_Jp(ni,Na,Nd,Wp,Wn,coeficientes,Va,T)
+    J_n,J_p = obtener_porcentajes_Jn_Jp(ni,Na,Nd,Wp,Wn,coeficientes,Va,T)
 
 
-    J_nN_arr = J_nP - J_nN
+    print(f"Corrientes totales: J_n = {J_n*1e6:.3f}  u A/cm^2  J_p = {J_p*1e6:.3f} u A/cm^2 ")
 
-    J_pP_arr = J_pN - J_pP
+
+    print(f"\nCorrientes de difusion de mayoritarios: J_nN_dif = {J_nN_dif*1e6:.3f}  u A/cm^2  J_pP_dif = {J_pP_dif*1e6:.3f} u A/cm^2 ")
+
+
+    J_nN_arr = J_n - J_nN_dif
+
+    J_pP_arr = J_p - J_pP_dif
 
     
 
-    print(f"Corrientes de Arrastre Mayoritarios: J_nN = {J_nN_arr*1e6:.3f}  u A/cm^2  J_pP = {J_pP_arr*1e6:.3f} u A/cm^2 ")
+    print(f"Corrientes de Arrastre Mayoritarios: J_nN_arr = {J_nN_arr*1e6:.3f}  u A/cm^2  J_pP_arr = {J_pP_arr*1e6:.3f} u A/cm^2 ")
 
     return J_nN_arr, J_pP_arr

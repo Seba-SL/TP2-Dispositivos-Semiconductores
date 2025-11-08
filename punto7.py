@@ -18,8 +18,10 @@ def punto7(ni,Na,Nd,Wp,Wn,Va,T,imprimir_enunciado):
     if(imprimir_enunciado):
         print("\nPunto 7: \nCalcular la corriente de difusión de mayoritarios de cada lado de la juntura, suponiendo válida la hipótesis de cuasi-neutralidad en las regiones cuasi-neutrales (QNRs), ¿En qué sentido se difunden los portadores mayoritarios? ¿Es consistente con la corriente calculada en el ı́tem 5?\n\n")
    
-    coeficientes = movilidades_y_difusion(Na,Nd,T)
+    Vth = (k*T)/q
 
+    coeficientes = movilidades_y_difusion(Na,Nd,T)
+    
     D_nN  = coeficientes['D_nN']
     D_pN  = coeficientes['D_pN']
     D_nP  = coeficientes['D_nP']  # ¡Asegúrate de que esta clave exista en tu dict!
@@ -27,13 +29,18 @@ def punto7(ni,Na,Nd,Wp,Wn,Va,T,imprimir_enunciado):
 
     J_nP,J_pN = obtener_porcentajes_Jn_Jp(ni,Na,Nd,Wp,Wn,coeficientes,Va,T)
 
+    phi_bi = obtener_tension_contacto(Na,Nd,ni,T)
 
-    J_nN = (D_nN/D_pN)*J_nP
+    xn = x_(phi_bi - Va, Na, Nd, e_s)
+    xp = x_(phi_bi - Va, Nd, Na, e_s)
 
-    J_pP = (D_pP/D_nP)*J_pN
+
+    J_nN_dif =- q*(ni*ni)*D_nN/(Nd*(Wn*100 - xn ))*(np.exp(Va/Vth) - 1)
+
+    J_pP_dif = -q*(ni*ni)*D_pP/(Na*(Wp*100 - xp ))*(np.exp(Va/Vth) - 1)
 
 
-    print(f"Corrientes de Difusión Mayoritarios: J_nN = {J_nN*1e6:.3f}  u A/cm^2  J_pP = {J_pP*1e6:.3f} u A/cm^2 ")
+    print(f"Corrientes de Difusión Mayoritarios: J_nN_dif = {J_nN_dif}   A/cm^2  J_pP_dif = {J_pP_dif}  A/cm^2 ")
    
-    return J_nN , J_pP
+    return J_nN_dif , J_pP_dif
 
