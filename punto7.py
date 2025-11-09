@@ -35,10 +35,9 @@ def punto7(ni,Na,Nd,Wp,Wn,Va,T,imprimir_enunciado):
     xp = x_(phi_bi - Va, Nd, Na, e_s)
 
 
-    J_nN_dif =- q*(ni*ni)*D_nN/(Nd*(Wn*100 - xn ))*(np.exp(Va/Vth) - 1)
+    J_nN_dif =-J_pN*(D_nN/D_pN)
 
-    J_pP_dif = -q*(ni*ni)*D_pP/(Na*(Wp*100 - xp ))*(np.exp(Va/Vth) - 1)
-
+    J_pP_dif = -J_nP*(D_pP/D_nP)
 
     print(f"Corrientes de Difusión Mayoritarios: J_nN_dif = {J_nN_dif}   A/cm^2  J_pP_dif = {J_pP_dif}  A/cm^2 ")
    

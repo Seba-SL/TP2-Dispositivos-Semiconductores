@@ -66,7 +66,7 @@ def Graficar_corrientes_diodo(
     # ===== QNR–P =====
     # Minoritarios: electrones (azul)
     flecha(-Wp_um*0.7, y_base, 1,  J_nP_dif, 'blue', '-',  rf'$\mathbf{{J_{{nP,dif}}}}$ = {J_nP_dif*1e6:.2f} μA/cm²')
-    flecha(-Wp_um*0.7, y_base-0.6, 1,  J_nP_arr, 'darkblue', '-', rf'$\mathbf{{J_{{nP,arr}}}}$ = {J_nP_arr*1e6:.2f} μA/cm²')
+    flecha(-Wp_um*0.7, y_base-0.6, 1,  J_nP_arr, 'darkblue', '-', rf'$\mathbf{{J_{{nP,arr}}}}$ = {J_nP_arr*1e15:.2f} fA/cm²')
 
     # Mayoritarios: huecos (rojo)
     flecha(-Wp_um*0.25, y_base, -1, J_pP_dif, 'red', '-',  rf'$\mathbf{{J_{{pP,dif}}}}$ = {J_pP_dif*1e6:.2f} μA/cm²')
@@ -75,7 +75,7 @@ def Graficar_corrientes_diodo(
     # ===== QNR–N =====
     # Minoritarios: huecos (rojo)
     flecha(Wn_um*0.35, y_base, 1, J_pN_dif, 'red', '-', rf'$\mathbf{{J_{{pN,dif}}}}$ = {J_pN_dif*1e6:.2f} μA/cm²')
-    flecha(Wn_um*0.35, y_base-0.6, 1, J_pN_arr, 'darkred', '-', rf'$\mathbf{{J_{{pN,arr}}}}$ = {J_pN_arr*1e6:.2f} μA/cm²')
+    flecha(Wn_um*0.35, y_base-0.6, 1, J_pN_arr, 'darkred', '-', rf'$\mathbf{{J_{{pN,arr}}}}$ = {J_pN_arr*1e15:.2f} f A/cm²')
 
     # Mayoritarios: electrones (azul)
     flecha(Wn_um*0.8, y_base, -1, J_nN_dif, 'blue', '-', rf'$\mathbf{{J_{{nN,dif}}}}$ = {J_nN_dif*1e6:.2f} μA/cm²')
@@ -101,7 +101,7 @@ def Graficar_corrientes_diodo(
     ax.set_ylim(0, 3.2)
     ax.set_xlabel("Posición x [μm]", fontsize=13)
     ax.set_ylabel("Intensidad relativa de corriente", fontsize=13)
-    ax.set_title("Distribución espacial de corrientes en el diodo PN", fontsize=15, fontweight='bold')
+    ax.set_title("Densidades de Corrientes en el diodo PN con polarización Va = 210 mV", fontsize=15, fontweight='bold')
     ax.grid(alpha=0.25)
     plt.tight_layout()
     plt.show()

@@ -38,7 +38,7 @@ e_s = 11.9*e_o
 
 #punto6(Na,Nd,ni,T ,Wp,Wn,Va)
 
-#punto7(ni,Na,Nd,Wp,Wn,Va,T,True)
+punto7(ni,Na,Nd,Wp,Wn,Va,T,True)
    
 #punto8(ni,Na,Nd,Wp,Wn,Va,T,True)
 
