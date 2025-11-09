@@ -51,41 +51,56 @@ def densidad_de_carga(Na, Nd, phi_bi, Va):
 
     return x_lim_max  # <--- devolvemos el límite para reutilizarlo
 
-
 def campo_electrico(Na, Nd, phi_bi, Va, x_lim_max):
+    # Valores en equilibrio
     xn0 = x_(phi_bi, Na, Nd, e_s)
     xp0 = x_(phi_bi, Nd, Na, e_s)
+    # Valores con polarización directa
     xna = x_(phi_bi - Va, Na, Nd, e_s)
     xpa = x_(phi_bi - Va, Nd, Na, e_s)
 
+    # Vector de posiciones
     x = np.linspace(-x_lim_max, x_lim_max, 5000)
+
+    # --- Campo en equilibrio ---
     E_o = np.zeros_like(x)
+    mask_p0 = (x > -xp0) & (x <= 0)
+    E_o[mask_p0] = -q * Na / e_s * (x[mask_p0] + xp0)
+    mask_n0 = (x > 0) & (x <= xn0)
+    E_o[mask_n0] = q * Nd / e_s * (x[mask_n0] - xn0)
 
-    mask_p = (x > -xp0) & (x <= 0)
-    E_o[mask_p] = -q * Na / e_s * (x[mask_p] + xp0)
-    mask_n = (x > 0) & (x <= xn0)
-    E_o[mask_n] = q * Nd / e_s * (x[mask_n] - xn0)
+    # --- Campo con polarización ---
+    E_a = np.zeros_like(x)
+    mask_pa = (x > -xpa) & (x <= 0)
+    E_a[mask_pa] = -q * Na / e_s * (x[mask_pa] + xpa)
+    mask_na = (x > 0) & (x <= xna)
+    E_a[mask_na] = q * Nd / e_s * (x[mask_na] - xna)
 
-    E_a = E_o * np.sqrt(1 - Va / phi_bi)
-
+    # --- Gráfico ---
     plt.figure(figsize=(10, 6))
-    plt.plot(x * 1e4, E_o / 1e3, color='blue', linewidth=5, alpha=0.8, label=r'$\mathcal{E}_0(x)$')
+    plt.plot(x * 1e4, E_o / 1e3, color='blue', linewidth=5, alpha=0.8, label=r'$\mathcal{E}_0(x)$ (equilibrio)')
     plt.plot(x * 1e4, E_a / 1e3, color='red', linewidth=5, alpha=0.8, label=rf'$\mathcal{{E}}_a(x)$ ({Va*1000:.0f} mV)')
 
+    # Marcas y ejes
     plt.axhline(0, color='k', linewidth=0.8)
     plt.axvline(0, color='k', linestyle='--', linewidth=0.9, label='Unión metalúrgica')
+
+    # Líneas verticales que marcan los límites de la SCR en ambos casos
+    plt.axvline(-xp0 * 1e4, color='blue', linestyle=':', alpha=0.6)
+    plt.axvline(xn0 * 1e4, color='blue', linestyle=':', alpha=0.6)
+    plt.axvline(-xpa * 1e4, color='red', linestyle=':', alpha=0.6)
+    plt.axvline(xna * 1e4, color='red', linestyle=':', alpha=0.6)
 
     plt.xlim(-x_lim_max * 1e4, x_lim_max * 1e4)
     plt.xlabel('Posición $x$ [nm]')
     plt.ylabel('Campo eléctrico $\mathcal{E}(x)$ [kV/cm]')
-    plt.title('Campo eléctrico en una unión p–n')
+    plt.title('Campo eléctrico en la unión p–n')
     plt.grid(True, linestyle='--', alpha=1)
     plt.legend()
-    plt.yticks(np.arange(-1, -13, -1))  # de -1 a -12, paso -1
     plt.tight_layout()
     plt.show()
-    
-    return 
+
+    return xna, xpa
 
 
 
